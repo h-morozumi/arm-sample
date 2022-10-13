@@ -53,11 +53,12 @@
         },
         "WindowsOSVersion": {
             "type": "string",
-            "defaultValue": "2016-Datacenter",
+            "defaultValue": "2022-datacenter-smalldisk-g2",
             "allowedValues": [
                 "2012-R2-Datacenter",
                 "2016-Datacenter",
-                "2019-Datacenter"
+                "2019-Datacenter",
+                "2022-datacenter-smalldisk-g2"
             ],
             "metadata": {
                 "description": "Windows Server の OS Version"
@@ -97,7 +98,7 @@
         },
         "WindowsManagedDiskType": {
             "type": "string",
-            "defaultValue": "StandardSSD_LRS",
+            "defaultValue": "Standard_LRS",
             "allowedValues": [
               "StandardSSD_LRS",
               "Standard_LRS",
@@ -187,7 +188,7 @@
         },
         "LinuxManagedDiskType": {
             "type": "string",
-            "defaultValue": "StandardSSD_LRS",
+            "defaultValue": "Standard_LRS",
             "allowedValues": [
               "StandardSSD_LRS",
               "Standard_LRS",
@@ -528,5 +529,6 @@
             }
         }
     }
-    ]
+    ],
+    "outputs": {}
 }
