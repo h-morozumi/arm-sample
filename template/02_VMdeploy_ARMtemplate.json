@@ -1,0 +1,534 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VirtualNetworkName": {
+            "type": "string",
+            "defaultValue": "AzureStudy-vnet",
+            "metadata": {
+                "description": "仮想ネットワークの名前"
+            }
+        },
+        "VirtualNetworkAddressPrefix": {
+            "type": "string",
+            "defaultValue": "172.0.0.0/24",
+            "metadata": {
+                "description": "仮想ネットワークの IPv4 アドレス空間"
+            }
+        },
+
+
+        "WindowsVirtualMachineSubnetName": {
+            "type": "string",
+            "defaultValue": "Windows-VM-subnet",
+            "metadata": {
+                "description": "Windows 仮想マシンサブネットの名前"
+            }
+        },
+        "WindowsVirtualMachineSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "172.0.0.0/26",
+            "metadata": {
+                "description": "Windows 仮想マシンサブネットのアドレス範囲"
+            }
+        },
+        "WindowsVirtualMachineSubnetNSGName": {
+            "type": "string",
+            "defaultValue": "Windows-VM-nsg",
+            "metadata": {
+                "description": "Windows 仮想マシンサブネットの NSG の名前"
+            }
+        },
+        "WindowsAdminUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Windows 仮想マシン管理者の名前"
+            }
+        },
+        "WindowsAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Windows 仮想マシンのパスワード"
+            }
+        },
+        "WindowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2022-datacenter-smalldisk-g2",
+            "allowedValues": [
+                "2012-R2-Datacenter",
+                "2016-Datacenter",
+                "2019-Datacenter",
+                "2022-datacenter-smalldisk-g2"
+            ],
+            "metadata": {
+                "description": "Windows Server の OS Version"
+            }
+        },
+        "WindowsVirtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_B2ms",
+            "allowedValues": [
+                "Standard_D2_v3",
+                "Standard_B2ms",
+                "Standard_D4_v3",
+                "Standard_E2_v3",
+                "Standard_E4_v3",
+                "Standard_D2s_v3",
+                "Standard_D4s_v3",
+                "Standard_E2s_v3",
+                "Standard_E4s_v3"
+            ],
+            "metadata": {
+                "description": "Windows 仮想マシンのサイズ"
+            }
+        },
+        "WindowsVirtualMachineNIC": {
+            "type": "string",
+            "defaultValue": "Windows-VM-nic",
+            "metadata": {
+                "description": "Windows 仮想マシンの NIC"
+            }
+        },
+        "WindowsVirtualMachineName": {
+            "type": "string",
+            "defaultValue": "Windows-VM",
+            "metadata": {
+                "description": "Windows 仮想マシンの名前"
+            }
+        },
+        "WindowsManagedDiskType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+              "StandardSSD_LRS",
+              "Standard_LRS",
+              "Premium_LRS"
+            ],
+            "metadata": {
+              "description": "Windows 仮想マシンの Managed Disk のタイプ"
+            }
+        },
+
+        "LinuxVirtualMachineSubnetName": {
+            "type": "string",
+            "defaultValue": "Linux-VM-subnet",
+            "metadata": {
+                "description": "Linux 仮想マシンサブネットの名前"
+            }
+        },
+        "LinuxVirtualMachineSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "172.0.0.64/26",
+            "metadata": {
+                "description": "Linux 仮想マシンサブネットのアドレス範囲"
+            }
+        },
+        "LinuxVirtualMachineSubnetNSGName": {
+            "type": "string",
+            "defaultValue": "Linux-VM-nsg",
+            "metadata": {
+                "description": "Linux 仮想マシンサブネットの NSG の名前"
+            }
+        },
+        "LinuxAdminUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Linux 仮想マシン管理者の名前"
+            }
+        },
+        "LinuxAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Linux 仮想マシンのパスワード"
+            }
+        },
+        "UbuntuOSVersion": {
+            "type": "string",
+            "defaultValue": "18.04-LTS",
+            "allowedValues": [
+                "16.04-LTS",
+                "18.04-LTS",
+                "20.04-LTS"
+            ],
+            "metadata": {
+                "description": "Ubuntu Server の OS Version"
+            }
+        },
+        "LinuxVirtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_B2ms",
+            "allowedValues": [
+                "Standard_D2_v3",
+                "Standard_B2ms",
+                "Standard_D4_v3",
+                "Standard_E2_v3",
+                "Standard_E4_v3",
+                "Standard_D2s_v3",
+                "Standard_D4s_v3",
+                "Standard_E2s_v3",
+                "Standard_E4s_v3"
+            ],
+            "metadata": {
+                "description": "Linux 仮想マシンのサイズ"
+            }
+        },
+        "LinuxVirtualMachineNIC": {
+            "type": "string",
+            "defaultValue": "Linux-VM-nic",
+            "metadata": {
+                "description": "Linux 仮想マシンの NIC"
+            }
+        },
+        "LinuxVirtualMachineName": {
+            "type": "string",
+            "defaultValue": "Linux-VM",
+            "metadata": {
+                "description": "Linux 仮想マシンの名前"
+            }
+        },
+        "LinuxManagedDiskType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+              "StandardSSD_LRS",
+              "Standard_LRS",
+              "Premium_LRS"
+            ],
+            "metadata": {
+              "description": "Linux 仮想マシンの Managed Disk のタイプ"
+            }
+        },
+
+
+        "AzureBastionSubnetName": {
+            "type": "string",
+            "defaultValue": "AzureBastionSubnet",
+            "metadata": {
+                "description": "Azure Bastion サブネットの名前"
+            }
+        },
+        "AzureBastionSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "172.0.0.128/26",
+            "metadata": {
+                "description": "Azure Bustion サブネットのアドレス範囲"
+            }
+        },
+        "AzureBastionHostName": {
+            "type": "string",
+            "defaultValue": "AzureBastionHost",
+            "metadata": {
+                "description": "Azure Bustion の名前"
+            }
+        },
+        "AzureBastionPublicIP": {
+            "type": "string",
+            "defaultValue": "AzureBastion-pip",
+            "metadata": {
+            "description": "Azure Bustion パブリック IP の名前"
+            }
+        }
+    },
+
+
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "WindowsSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('WindowsVirtualMachineSubnetName'))]",
+        "LinuxSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('LinuxVirtualMachineSubnetName'))]"
+    },
+
+
+    "resources": [
+    {
+        "apiVersion": "2020-04-01",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "name": "[parameters('WindowsVirtualMachineSubnetNSGName')]",
+        "location": "[variables('location')]",
+        "properties": {
+            "securityRules": [
+            {
+                "name": "allow-smb",
+                "properties": {
+                    "protocol": "TCP",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "445",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 1000,
+                    "direction": "Outbound",
+                    "sourcePortRanges": [],
+                    "destinationPortRanges": [],
+                    "sourceAddressPrefixes": [],
+                    "destinationAddressPrefixes": []
+                }
+            }
+            ]
+        }
+    },
+
+    {
+        "apiVersion": "2020-04-01",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "name": "[parameters('LinuxVirtualMachineSubnetNSGName')]",
+        "location": "[variables('location')]",
+        "properties": {
+            "securityRules": [
+            {
+                "name": "allow-smb",
+                "properties": {
+                    "protocol": "TCP",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "445",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 1000,
+                    "direction": "Outbound",
+                    "sourcePortRanges": [],
+                    "destinationPortRanges": [],
+                    "sourceAddressPrefixes": [],
+                    "destinationAddressPrefixes": []
+                }
+            }
+            ]
+        }
+    },
+
+    {
+        "apiVersion": "2018-10-01",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[parameters('VirtualNetworkName')]",
+        "location": "[variables('location')]",
+        "properties": {
+            "addressSpace": {
+            "addressPrefixes": [
+                "[parameters('VirtualNetworkAddressPrefix')]"
+                ]
+            }
+        },
+
+
+        "resources": [
+        {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "name": "[parameters('WindowsVirtualMachineSubnetName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[parameters('VirtualNetworkName')]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('WindowsVirtualMachineSubnetPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('WindowsVirtualMachineSubnetNSGName'))]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "name": "[parameters('LinuxVirtualMachineSubnetName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[parameters('VirtualNetworkName')]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('WindowsVirtualMachineSubnetName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('LinuxVirtualMachineSubnetPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('LinuxVirtualMachineSubnetNSGName'))]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "name": "[parameters('AzureBastionSubnetName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[parameters('VirtualNetworkName')]",
+                "[parameters('WindowsVirtualMachineSubnetName')]",
+                "[parameters('LinuxVirtualMachineSubnetName')]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('AzureBastionSubnetPrefix')]"
+            }
+        }
+        ]
+    },
+
+    {
+        "type": "Microsoft.Network/publicIpAddresses",
+        "apiVersion": "2019-02-01",
+        "name": "[parameters('AzureBastionPublicIP')]",
+        "location": "[variables('location')]",
+        "sku": {
+          "name": "Standard"
+        },
+        "properties": {
+          "publicIPAllocationMethod": "Static"
+        }
+    },
+
+    {
+        "type": "Microsoft.Network/bastionHosts",
+        "apiVersion": "2019-04-01",
+        "name": "[parameters('AzureBastionHostName')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('AzureBastionSubnetName'))]",
+            "[resourceId('Microsoft.Network/publicIpAddresses', parameters('AzureBastionPublicIP'))]"
+        ],
+        "properties": {
+            "ipConfigurations": [
+                {
+                "name": "BastionIpconfig",
+                "properties": {
+                    "subnet": {
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('AzureBastionSubnetName'))]"
+                    },
+                "publicIPAddress": {
+                    "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('AzureBastionPublicIP'))]"
+                }
+                }
+            }
+            ]
+        }    
+    },
+
+    {
+        "type": "Microsoft.Network/networkInterfaces",
+        "apiVersion": "2018-11-01",
+        "name": "[parameters('WindowsVirtualMachineNIC')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('WindowsVirtualMachineSubnetName'))]"
+        ],
+        "properties": {
+            "ipConfigurations": [
+                {
+                "name": "WindowsIpconfig",
+                "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[variables('WindowsSubnetRef')]"
+                    }
+                }
+                }
+            ],
+            "enableAcceleratedNetworking": false
+        }
+    },
+
+    {
+        "type": "Microsoft.Network/networkInterfaces",
+        "apiVersion": "2018-11-01",
+        "name": "[parameters('LinuxVirtualMachineNIC')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VirtualNetworkName'), parameters('LinuxVirtualMachineSubnetName'))]"
+        ],
+        "properties": {
+            "ipConfigurations": [
+                {
+                "name": "LinuxIpconfig",
+                "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[variables('LinuxSubnetRef')]"
+                    }
+                }
+                }
+            ],
+            "enableAcceleratedNetworking": false
+        }
+    },
+
+    {
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2018-10-01",
+        "name": "[parameters('WindowsVirtualMachineName')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces/', parameters('WindowsVirtualMachineNIC'))]"
+        ],
+        "zones": [
+            "1"
+        ],
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "[parameters('WindowsVirtualMachineSize')]"
+            },
+            "osProfile": {
+                "computerName": "[parameters('WindowsVirtualMachineName')]",
+                "adminUsername": "[parameters('WindowsAdminUserName')]",
+                "adminPassword": "[parameters('WindowsAdminPassword')]"
+            },
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "MicrosoftWindowsServer",
+                    "offer": "WindowsServer",
+                    "sku": "[parameters('WindowsOSVersion')]",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('WindowsVirtualMachineNIC'))]"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2018-10-01",
+        "name": "[parameters('LinuxVirtualMachineName')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces/', parameters('LinuxVirtualMachineNIC'))]"
+        ],
+        "zones": [
+            "2"
+        ],
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "[parameters('LinuxVirtualMachineSize')]"
+            },
+            "osProfile": {
+                "computerName": "[parameters('LinuxVirtualMachineName')]",
+                "adminUsername": "[parameters('LinuxAdminUserName')]",
+                "adminPassword": "[parameters('LinuxAdminPassword')]"
+            },
+            "storageProfile": {
+                "imageReference": {
+                    "publisher": "Canonical",
+                    "offer": "UbuntuServer",
+                    "sku": "[parameters('UbuntuOSVersion')]",
+                    "version": "latest"
+                },
+                "osDisk": {
+                    "createOption": "FromImage"
+                }
+            },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('LinuxVirtualMachineNIC'))]"
+                    }
+                ]
+            }
+        }
+    }
+    ],
+    "outputs": {}
+}
