@@ -2,7 +2,7 @@
 Azure ARM Template Sample
 
 ## リソースの展開
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fh-morozumi%2Farm-sample%2Fmain%2F02_VMdeploy_ARMtemplate.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fh-morozumi%2Farm-sample%2Fmain%2Ftemplate%2Fazure-study-2.json)
 
 ## パラメータ
 - **Virtual Network Name**:	仮想ネットワーク名(AzureStudy-vnet)
