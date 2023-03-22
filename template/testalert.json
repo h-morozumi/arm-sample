@@ -1,0 +1,5 @@
+{
+  "AlertName": "Test Alert",
+  "Description": "このアラートはテストです",
+  "Severity": 3
+}

@@ -1,0 +1,57 @@
+●アプリ 1: Http リクエストの内容を Blob にファイルで保存
+・HTTP要求の受信時　JSON
+
+
+{
+  "type": "object",
+  "properties": {
+    "Name": {
+      "type": "string"
+    },
+    "EmailAddress": {
+      "type": "string"
+    }
+  }
+}
+
+・Blobを作成する（V2）
+
+{
+  "Name" : "" ,
+  "EmailAddress" : ""
+}
+
+・URLを実行
+
+Invoke-RestMethod -Method POST -ContentType "application/json" -Body (@{"Name"="＜名前＞";"EmailAddress"="＜Emailアドレス＞"} | ConvertTo-Json) -Uri "＜コピーしたURL＞"
+
+●アプリ 2: アップロードされたファイルからメールを生成
+
+・JSONの解析
+
+{
+  "type": "object",
+    "properties": {
+      "AlertName": {
+        "type": "string"
+      },
+      "Description": {
+        "type": "string"
+      },
+    "Severity": {
+      "type": "integer"
+    }
+  }
+}
+
+・アップロード用ファイルJSON
+ファイル名：testalert.json
+
+{
+  "AlertName": "Test Alert",
+  "Description": "このアラートはテストです",
+  "Severity": 3
+}
+
+
+
